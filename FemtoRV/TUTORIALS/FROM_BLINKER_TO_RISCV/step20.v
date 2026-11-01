@@ -283,7 +283,10 @@ module Processor (
 		       isStore ? STORE : 
 		       FETCH_INSTR;
 `ifdef BENCH      
-	      if(isSYSTEM) $finish();
+	      if(isSYSTEM) begin
+		 $display("EBREAK (SYSTEM) — CPU halted");
+		 $finish();
+	      end
 `endif      
 	   end
 	   LOAD: begin

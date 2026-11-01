@@ -1,0 +1,21 @@
+make: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+Configuring for Linux x86_64
+Using system RISC-V GCC: /usr/bin/riscv64-unknown-elf-gcc
+/usr/bin//riscv64-unknown-elf-gcc -I. -O2 -fno-pic -march=rv32i -mabi=ilp32 -fno-stack-protector -w -mno-relax -ffreestanding -std=gnu99  -c helloC.c
+/usr/bin//riscv64-unknown-elf-as -march=rv32i -mabi=ilp32 -mno-relax  start.S -o start.o 
+/usr/bin//riscv64-unknown-elf-ld -T bram.ld -m elf32lriscv -nostdlib --no-relax helloC.o start.o -o helloC.bram.elf
+/usr/bin//riscv64-unknown-elf-ld: warning: helloC.bram.elf has a LOAD segment with RWX permissions
+/workspace/FemtoRV/FIRMWARE//TOOLS/firmware_words helloC.bram.elf -ram 6144 -max_addr 6144 -out helloC.bram.hex
+   RAM SIZE=6144
+   LOAD ELF: helloC.bram.elf
+       max address=278
+Code size: 69 words ( total RAM size: 1536 words )
+Occupancy: 4%
+testing MAX_ADDR limit: 6144
+   max_addr OK
+   SAVE HEX: helloC.bram.hex
+cp helloC.bram.hex ../firmware.hex
+mkdir -p ../obj_dir
+cp helloC.bram.hex ../obj_dir/firmware.hex
+echo helloC.bram.hex > ../firmware.txt
+make: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'

@@ -9,7 +9,13 @@
 
 FIRMWARE_DIR=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
+# Board `make <BOARD>.firmware_config` writes config.mk. For Verilator /
+# Icarus of the teaching SoC, fall back to the committed RV32I sim flags.
+ifeq ($(wildcard $(FIRMWARE_DIR)/config.mk),)
+include $(FIRMWARE_DIR)/config.sim.mk
+else
 include $(FIRMWARE_DIR)/config.mk
+endif
 DEVICES_ASM=$(subst -D,-defsym ,$(DEVICES))
 
 show_config:
@@ -62,6 +68,23 @@ RVTOOLCHAIN_BIN_DIR=$(RVTOOLCHAIN_DIR)/bin
 RVTOOLCHAIN_LIB_DIR=$(RVTOOLCHAIN_DIR)/$(RVTOOLCHAIN_BIN_PREFIX)/lib/$(ARCH)/$(ABI)
 RVTOOLCHAIN_GCC_LIB_DIR=$(RVTOOLCHAIN_DIR)/lib/gcc/$(RVTOOLCHAIN_BIN_PREFIX)/$(TOOLCHAIN_GCC_VER)/$(ARCH)/$(ABI)
 
+# Prefer a system RISC-V GCC (Ubuntu gcc-riscv64-unknown-elf, xpack, ...)
+# over downloading the bundled SiFive tarball. Set USE_BUNDLED_TOOLCHAIN=1
+# to force the tarball path used by the original FPGA tutorials.
+SYSTEM_RVGCC := $(shell command -v riscv64-unknown-elf-gcc 2>/dev/null)
+SYSTEM_RVNONE_GCC := $(shell command -v riscv-none-elf-gcc 2>/dev/null)
+ifneq ($(USE_BUNDLED_TOOLCHAIN),1)
+  ifneq ($(SYSTEM_RVGCC),)
+    RVTOOLCHAIN_BIN_PREFIX := riscv64-unknown-elf
+    RVTOOLCHAIN_BIN_DIR := $(dir $(SYSTEM_RVGCC))
+    $(info Using system RISC-V GCC: $(SYSTEM_RVGCC))
+  else ifneq ($(SYSTEM_RVNONE_GCC),)
+    RVTOOLCHAIN_BIN_PREFIX := riscv-none-elf
+    RVTOOLCHAIN_BIN_DIR := $(dir $(SYSTEM_RVNONE_GCC))
+    $(info Using system RISC-V GCC: $(SYSTEM_RVNONE_GCC))
+  endif
+endif
+
 RVAS=$(RVTOOLCHAIN_BIN_DIR)/$(RVTOOLCHAIN_BIN_PREFIX)-as
 RVLD=$(RVTOOLCHAIN_BIN_DIR)/$(RVTOOLCHAIN_BIN_PREFIX)-ld
 RVOBJCOPY=$(RVTOOLCHAIN_BIN_DIR)/$(RVTOOLCHAIN_BIN_PREFIX)-objcopy
@@ -73,6 +96,15 @@ RVRANLIB=$(RVTOOLCHAIN_BIN_DIR)/$(RVTOOLCHAIN_BIN_PREFIX)-ranlib
 
 RV_BINARIES=$(RVAS) $(RVLD) $(RVOBJCOPY) $(RVOBJDUMP) $(RVGCC) \
             $(RVAR) $(RVRANLIB)
+
+# System GCC: resolve libgcc from -print-libgcc-file-name (multilib-aware).
+ifneq ($(USE_BUNDLED_TOOLCHAIN),1)
+  ifneq ($(SYSTEM_RVGCC)$(SYSTEM_RVNONE_GCC),)
+    RVGCC_LIB_FILE := $(shell $(RVGCC) -march=$(ARCH) -mabi=$(ABI) -print-libgcc-file-name)
+    RVTOOLCHAIN_GCC_LIB_DIR := $(dir $(RVGCC_LIB_FILE))
+    RVTOOLCHAIN_LIB_DIR := $(dir $(shell $(RVGCC) -march=$(ARCH) -mabi=$(ABI) -print-file-name=libc.a))
+  endif
+endif
 
 # Note: it is also possible to comment this line, and use replacement functions
 # for a small subset of libc, see comments in LIBFEMTOC/Makefile. 
@@ -99,16 +131,16 @@ RVASFLAGS=-march=$(ARCH) -mabi=$(ABI) $(DEVICES_ASM) $(RVINCS)
 RVLDFLAGS=-m elf32lriscv -b elf32-littleriscv --no-relax --print-memory-usage
 RVCPPFLAGS=-fno-exceptions -fno-enforce-eh-specs
 
-#Rule to compile C objects
-.c.o: $< $(RV_BINARIES)
+# Rule to compile C objects (pattern rules so $(RV_BINARIES) is a real prereq)
+%.o: %.c $(RV_BINARIES)
 	$(RVGCC) $(RVCFLAGS) $(RVUSERCFLAGS) -c $<
 
-#Rule to compile C++ objects
-.cpp.o: $< $(RV_BINARIES)
+# Rule to compile C++ objects
+%.o: %.cpp $(RV_BINARIES)
 	$(RVGPP) $(RVCFLAGS) $(RVUSERCFLAGS) $(RVCPPFLAGS) -c $<
 
-#Rule to compile ASM objects
-.S.o: $< $(RV_BINARIES)
+# Rule to compile ASM objects
+%.o: %.S $(RV_BINARIES)
 	$(RVAS) $(RVASFLAGS) $(RVUSERASFLAGS) $< -o $@ 
 
 # Libraries to link with standard executables

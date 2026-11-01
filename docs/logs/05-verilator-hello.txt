@@ -1,0 +1,17 @@
+make -C TUTORIALS/FROM_BLINKER_TO_RISCV test_verilator_hello
+make[1]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'
+make -C /workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE ARCH=rv32i ABI=ilp32 OPTIMIZE=-Os DEVICES= RAM_SIZE=6144 BOARD=sim helloC.bram.hex
+make[2]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+make[2]: 'helloC.bram.hex' is up to date.
+make[2]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+./run_verilator.sh step20.v
+LEDS: 10101
+Hello, world !
+PASS
+LEDS: 11111
+EBREAK (SYSTEM) — CPU halted
+- step20.v:288: Verilog $finish
+SIM DONE after 69170 clock cycles
+verilator_exit=0
+ALL TESTS PASSED.
+make[1]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'

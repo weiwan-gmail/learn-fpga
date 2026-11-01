@@ -18,12 +18,18 @@ include BOARDS/arty35_yosys_nextpnr.mk
 include BOARDS/cmod_a7_yosys_nextpnr.mk
 
 
-.PHONY: all clean terminal testbench 
+.PHONY: all clean terminal testbench toolchain-info test_verilator_hello test_hello sim-hello 
 
 ################################################################################
 
 all:
 	@echo "make one of ICESTICK, ICEFEATHER, ULX3S... (or .synth / .prog)"
+	@echo "simulation (teaching SoC): make test_verilator_hello"
+
+# C firmware hex + Verilator on FROM_BLINKER_TO_RISCV/step20.v
+# (documented in docs/TUTORIAL_zh.md). Full-SoC `make BENCH` still needs GLFW.
+toolchain-info test_verilator_hello test_hello sim-hello:
+	$(MAKE) -C TUTORIALS/FROM_BLINKER_TO_RISCV $@
 
 clean:
 	rm -f *.timings *.asc *.bin *.bit *config *.json *.svf \

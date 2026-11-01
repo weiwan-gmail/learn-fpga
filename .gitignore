@@ -25,3 +25,10 @@ FemtoRV/femtosoc.txt
 FemtoRV/FIRMWARE/config.mk
 FemtoRV/TOOLS/environment.yml
 FemtoRV/TOOLS/requirements.txt
+obj_dir/
+*.vcd
+FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/a.out
+FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/firmware.txt
+FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/sim_hello.last.log
+FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/PROGROM.hex
+FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/DATARAM.hex

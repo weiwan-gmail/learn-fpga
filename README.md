@@ -3,6 +3,19 @@ _Learning FPGA, yosys, nextpnr, and RISC-V_
 
 Mission statement: create teaching material for FPGAs, processor design and RISC-V, using around $40 per students.
 
+Learning ladder (this fork)
+---------------------------
+Chinese primary tutorial for the **FemtoRV** step (after tinyriscv / picorv32,
+before darkriscv / SERV): **[docs/TUTORIAL_zh.md](docs/TUTORIAL_zh.md)**
+([English](docs/TUTORIAL.md), [commands](docs/LEARNING.md), [PASS logs](docs/logs/)).
+
+```bash
+sudo apt-get install -y iverilog verilator gcc-riscv64-unknown-elf build-essential
+cd FemtoRV && make test_verilator_hello
+# expect: Hello, world ! / PASS / ALL TESTS PASSED.
+```
+
+
 ![](FemtoRV/TUTORIALS/Images/IceStick_hello.gif)
 
 FemtoRV: a minimalistic RISC-V CPU
