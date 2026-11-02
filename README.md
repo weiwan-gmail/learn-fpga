@@ -15,6 +15,8 @@ cd FemtoRV && make test_verilator_hello
 # expect: Hello, world ! / PASS / ALL TESTS PASSED.
 ```
 
+Optional CMake dual-tree (Make path unchanged): **[CMAKE.md](CMAKE.md)**.
+
 
 ![](FemtoRV/TUTORIALS/Images/IceStick_hello.gif)
 
