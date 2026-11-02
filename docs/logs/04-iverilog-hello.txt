@@ -1,0 +1,17 @@
+make -C TUTORIALS/FROM_BLINKER_TO_RISCV test_hello
+make[1]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'
+make -C /workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE ARCH=rv32i ABI=ilp32 OPTIMIZE=-Os DEVICES= RAM_SIZE=6144 BOARD=sim helloC.bram.hex
+make[2]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+Configuring for Linux x86_64
+Using system RISC-V GCC: /usr/bin/riscv64-unknown-elf-gcc
+make[2]: 'helloC.bram.hex' is up to date.
+make[2]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+./run.sh step20.v
+Hello, world !
+PASS
+LEDS = 11111
+EBREAK (SYSTEM) — CPU halted
+step20.v:288: $finish called at 138341 (1s)
+iverilog_exit=0
+ALL TESTS PASSED.
+make[1]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'

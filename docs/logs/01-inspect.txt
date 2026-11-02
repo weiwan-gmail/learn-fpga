@@ -1,0 +1,16 @@
+make -C TUTORIALS/FROM_BLINKER_TO_RISCV toolchain-info
+make[1]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'
+ARCH=rv32i ABI=ilp32 (teaching SoC step20.v)
+riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+Verilator: Verilator 5.020 2024-01-01 rev (Debian 5.020-1)
+Icarus: Icarus Verilog version 12.0 (stable) ()
+make[2]: Entering directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+Configuring for Linux x86_64
+Using system RISC-V GCC: /usr/bin/riscv64-unknown-elf-gcc
+ARCH=rv32i
+ABI=ilp32
+OPTIMIZE=-Os
+DEVICES=
+DEVICES_ASM=
+make[2]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/FIRMWARE'
+make[1]: Leaving directory '/workspace/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV'

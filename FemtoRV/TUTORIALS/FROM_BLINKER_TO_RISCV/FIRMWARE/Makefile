@@ -1,13 +1,18 @@
 include ../../../FIRMWARE/makefile.inc
-RVASFLAGS=-march=$(ARCH) -mabi=$(ABI) 
-RVCFLAGS=-I. -O2 -fno-pic -march=$(ARCH) -mabi=$(ABI) -fno-stack-protector -w -Wl,--no-relax
+RVASFLAGS=-march=$(ARCH) -mabi=$(ABI) -mno-relax
+RVCFLAGS=-I. -O2 -fno-pic -march=$(ARCH) -mabi=$(ABI) -fno-stack-protector -w -mno-relax -ffreestanding -std=gnu99
 
 RAM_SIZE=6144
 
 LIBOBJECTS=putchar.o wait.o print.o memcpy.o errno.o perf.o
 
+# One-shot C hello for simulation: do not pull perf.S (rdcycle needs Zicsr,
+# which step20.v does not implement) or libgcc.
+helloC.bram.elf: helloC.o start.o $(RV_BINARIES)
+	$(RVLD) -T bram.ld -m elf32lriscv -nostdlib --no-relax helloC.o start.o -o $@
+
 %.bram.elf: %.o start.o $(LIBOBJECTS) $(RV_BINARIES)
-	$(RVLD) -T bram.ld -m elf32lriscv -nostdlib -norelax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
+	$(RVLD) -T bram.ld -m elf32lriscv -nostdlib --no-relax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
 
 
 %.hex: %.elf $(FIRMWARE_DIR)/TOOLS/firmware_words 
@@ -21,7 +26,7 @@ LIBOBJECTS=putchar.o wait.o print.o memcpy.o errno.o perf.o
 # SPI FLASH 0 (sends everything to SPI flash)
 
 %.spiflash0.elf: %.o start.o $(LIBOBJECTS) $(RV_BINARIES)
-	$(RVLD) -T spiflash0.ld -m elf32lriscv -nostdlib -norelax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
+	$(RVLD) -T spiflash0.ld -m elf32lriscv -nostdlib --no-relax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
 
 %.spiflash0.bin: %.spiflash0.elf
 	$(RVOBJCOPY) $< $@ -O binary
@@ -32,7 +37,7 @@ LIBOBJECTS=putchar.o wait.o print.o memcpy.o errno.o perf.o
 # SPI FLASH 1 (sends code and variables initialization to SPI flash, variables to RAM)
 
 %.spiflash1.elf: %.o start_spiflash1.o $(LIBOBJECTS) $(RV_BINARIES)
-	$(RVLD) -T spiflash1.ld -m elf32lriscv -nostdlib -norelax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
+	$(RVLD) -T spiflash1.ld -m elf32lriscv -nostdlib --no-relax $< $(LIBOBJECTS) $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
 
 
 %.spiflash1.bin: %.spiflash1.elf
@@ -45,7 +50,7 @@ LIBOBJECTS=putchar.o wait.o print.o memcpy.o errno.o perf.o
 # SPI FLASH 2 (sends code and variables initialization to SPI flash, variables and fastcode to RAM)
 
 %.spiflash2.elf: %.o start_spiflash1.o $(LIBOBJECTS) $(RV_BINARIES)
-	$(RVLD) -T spiflash2.ld -m elf32lriscv -nostdlib -norelax $< $(LIBOBJECTS) -L$(RVTOOLCHAIN_LIB_DIR) -lm  $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
+	$(RVLD) -T spiflash2.ld -m elf32lriscv -nostdlib --no-relax $< $(LIBOBJECTS) -L$(RVTOOLCHAIN_LIB_DIR) -lm  $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a -o $@
 
 
 %.spiflash2.bin: %.spiflash2.elf
@@ -60,7 +65,7 @@ LIBOBJECTS=putchar.o wait.o print.o memcpy.o errno.o perf.o
 # DUAL MEMORY (64 kb program ROM, 64 kb data RAM)
 
 %.pipeline.elf: %.o start_pipeline.o $(LIBOBJECTS) $(RV_BINARIES)
-	$(RVLD) -T pipeline.ld -m elf32lriscv -nostdlib -norelax $< $(LIBOBJECTS) -L$(RVTOOLCHAIN_LIB_DIR) -lm $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a  -o $@
+	$(RVLD) -T pipeline.ld -m elf32lriscv -nostdlib --no-relax $< $(LIBOBJECTS) -L$(RVTOOLCHAIN_LIB_DIR) -lm $(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a  -o $@
 	$(RVOBJDUMP) -Mnumeric -D $@ > $@.list
 
 %.PROGROM.hex: %.pipeline.elf $(FIRMWARE_DIR)/TOOLS/firmware_words 

@@ -5,6 +5,17 @@ FEMTORV32 / FEMTOSOC: a minimalistic RISC-V CPU
 
 _(Everything can fit on the IceStick < 1280 LUTs)_
  
+Simulation (this fork)
+----------------------
+C firmware → `firmware.hex` → Verilator on the Episode I teaching SoC
+(`TUTORIALS/FROM_BLINKER_TO_RISCV/step20.v`). Docs live in the repo-root
+[`docs/`](../docs/TUTORIAL_zh.md).
+
+```bash
+make test_verilator_hello
+# Hello, world !  /  PASS  /  ALL TESTS PASSED.
+```
+
 Quick links:
 - [IceStick tutorial](TUTORIALS/IceStick.md)
 - [IceBreaker tutorial](TUTORIALS/IceBreaker.md)
