@@ -1,3 +1,7 @@
+#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
+#  define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "VSOC.h"
 #include "verilated.h"
 #include "femto_elf.h"
@@ -5,9 +9,23 @@
 #include <iostream>
 #include <memory>
 
+#if defined(_WIN32)
+#  include <io.h>
+#  include <process.h>
+#else
+#  include <unistd.h>
+#endif
+
 static const uint64_t DEFAULT_MAX_CYCLES = 2000000;
 
-int main(int argc, char** argv, char** env) {
+int main(int argc, char** argv
+#if !defined(_WIN32)
+         , char** env
+#endif
+         ) {
+#if !defined(_WIN32)
+   (void)env;
+#endif
    const std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
    contextp->commandArgs(argc, argv);
 
