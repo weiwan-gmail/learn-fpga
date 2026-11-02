@@ -8,6 +8,10 @@
  */ 
 
 
+#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
+#  define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <cctype>
@@ -16,6 +20,9 @@
 #include <vector>
 #include <cstring>
 #include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
 
 #include <femto_elf.h>
 
@@ -267,7 +274,12 @@ void save_RAM_hex(
     std::ofstream out(filename);
     for(int i=from_addr; i<to_addr; i+=4) {
 	char buff[10];
+#if defined(_MSC_VER)
+	sprintf_s(buff, sizeof(buff), "%.2x%.2x%.2x%.2x ",
+		  RAM[i+3], RAM[i+2], RAM[i+1], RAM[i]);
+#else
 	sprintf(buff,"%.2x%.2x%.2x%.2x ",RAM[i+3],RAM[i+2],RAM[i+1],RAM[i]);
+#endif
 	out << buff; 
 	if(((i/4+1) % 4) == 0) {
 	    out << std::endl;

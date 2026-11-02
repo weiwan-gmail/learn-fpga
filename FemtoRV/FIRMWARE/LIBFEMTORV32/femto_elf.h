@@ -4,10 +4,17 @@
  * Bruno Levy, 12/2020
  */
 
+#ifndef FEMTO_ELF_H
+#define FEMTO_ELF_H
+
 #ifdef STANDALONE_FEMTOELF
 #include <stdint.h>
 #else
 #include <femtorv32.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 typedef uint32_t elf32_addr; 
@@ -54,4 +61,10 @@ int elf32_load_at(const char* filename, Elf32Info* info, void* addr);
  * \return ELF32_OK or an error code.
  */
 int elf32_stat(const char* filename, Elf32Info* info);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* FEMTO_ELF_H */
 

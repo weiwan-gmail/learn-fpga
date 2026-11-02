@@ -11,8 +11,8 @@ Same FemtoRV `sim` target as [`../cmake-system/PASS_EVIDENCE.md`](../cmake-syste
 | RISC-V GCC | `riscv64-unknown-elf-gcc` 13.2.0 |
 | Conan | **2.34.0** (`pip install --user conan`) — same major/minor as PC2023 |
 
-Windows (Conan 2.34 + withlimon `verilator_bin.exe`) is a **follow-up**:
-[`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md).
+Windows MSVC (Conan 2.34 + withlimon / MSYS2 `verilator_bin.exe` PE, no
+GNU make required): [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md).
 
 ## Configure
 
@@ -58,3 +58,8 @@ SIM DONE after 69170 clock cycles
 ```
 
 `ctest`: **100% tests passed, 0 tests failed out of 1**.
+
+Re-run **2026-11-02** after the Windows MSVC cmake-sim change (same Linux
+VM): configure still packages system Verilator 5.020 as `verilator/5.052`,
+`--target sim` prints `Hello, world !` / `PASS` / `SIM DONE` /
+`ALL TESTS PASSED.`, `ctest` **100% tests passed, 0 tests failed out of 1**.

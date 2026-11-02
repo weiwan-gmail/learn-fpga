@@ -22,4 +22,4 @@ ctest --test-dir build-conan --output-on-failure
 If Conan is missing, use `cmake-system/` instead.
 
 Linux evidence: [`PASS_EVIDENCE.md`](PASS_EVIDENCE.md).
-Windows follow-up: [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md).
+Windows MSVC: [`../cmake-system/WINDOWS.md`](../cmake-system/WINDOWS.md).

@@ -14,5 +14,6 @@ ctest --test-dir build-system --output-on-failure
 ```
 
 Linux evidence: [`PASS_EVIDENCE.md`](PASS_EVIDENCE.md).
-Windows (withlimon `verilator_bin.exe`): [`WINDOWS.md`](WINDOWS.md) follow-up.
+Windows MSVC (Visual Studio generator, `verilator_bin.exe` PE, no GNU make):
+[`WINDOWS.md`](WINDOWS.md).
 Conan tree: [`../cmake-conan/`](../cmake-conan/). Index: [`../CMAKE.md`](../CMAKE.md).

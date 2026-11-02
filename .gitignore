@@ -12,6 +12,7 @@
 *_out.config
 *.000
 *.hex
+!/cmake/firmware.helloC.hex
 *.vvp
 *.dfu
 *.rpt
@@ -28,6 +29,7 @@ FemtoRV/TOOLS/requirements.txt
 obj_dir/
 *.vcd
 /build-system/
+/build-system-*/
 /build-conan/
 CMakeUserPresets.json
 FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/a.out

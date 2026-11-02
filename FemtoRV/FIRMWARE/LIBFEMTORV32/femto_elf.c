@@ -1,3 +1,7 @@
+#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
+#  define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <femto_elf.h>
 
 #ifdef STANDALONE_FEMTOELF
@@ -100,7 +104,13 @@ typedef struct
 int elf32_parse(const char* filename, Elf32Info* info) {
   Elf32_Ehdr elf_header;
   Elf32_Shdr sec_header;
-  FILE* f = fopen(filename,"r");
+  /* ELF is binary. Text-mode fopen on Windows (_WIN32, including MSVC)
+   * translates newlines and can corrupt the image. */
+#if defined(_WIN32)
+  FILE* f = fopen(filename, "rb");
+#else
+  FILE* f = fopen(filename, "r");
+#endif
   uint8_t* base_mem = (uint8_t*)(info->base_address);
   
   info->text_address = 0;

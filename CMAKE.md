@@ -20,8 +20,10 @@ flowchart LR
 
 `cmake-system` uses the distro Verilator; `cmake-conan` exports the in-tree
 recipe (withlimon PE on Windows, packages the system kit on Linux). Both
-call the same `femtorv_sim_setup()` which verilates the teaching SoC and
-still builds `firmware.hex` through the existing Make path.
+call the same `femtorv_sim_setup()` which verilates the teaching SoC.
+Linux builds `firmware.hex` through the existing Make path; Windows (and
+`-DFEMTORV_HEX_VIA_CMAKE=ON`) use a CMake-native RISC-V GCC recipe or the
+committed golden hex — GNU make is not required for the cmake sim.
 
 ```
 cmake/                 shared Verilator find, MSVC flag strip, sc_time_stamp,
@@ -48,5 +50,11 @@ ctest --test-dir build-conan --output-on-failure
 
 Expect `Hello, world !` / `PASS` / `SIM DONE` / `ALL TESTS PASSED.`
 
-Windows (withlimon `verilator_bin.exe`, MSVC `-fcoroutines*` strip) is a
-**follow-up** — see [`cmake-system/WINDOWS.md`](cmake-system/WINDOWS.md).
+Windows (PC2023, Visual Studio / MSVC): GNU make is **not** required for
+the Verilator cmake sim. Drive `verilator_bin.exe` (PE). See
+[`cmake-system/WINDOWS.md`](cmake-system/WINDOWS.md).
+
+```bat
+cd cmake-system
+powershell -File .\build_sim.ps1 -Generator "Visual Studio 17 2022"
+```
