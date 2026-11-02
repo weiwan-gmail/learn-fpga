@@ -27,6 +27,9 @@ FemtoRV/TOOLS/environment.yml
 FemtoRV/TOOLS/requirements.txt
 obj_dir/
 *.vcd
+/build-system/
+/build-conan/
+CMakeUserPresets.json
 FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/a.out
 FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/firmware.txt
 FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/sim_hello.last.log

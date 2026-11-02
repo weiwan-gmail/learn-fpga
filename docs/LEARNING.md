@@ -53,6 +53,15 @@ make -C FIRMWARE ARCH=rv32i ABI=ilp32 helloC.bram.hex
 
 Full-SoC `make BENCH` (GLFW OLED) and LiteX are optional; see TUTORIAL_zh §8.
 
+### 3) Optional CMake dual-tree (Make path unchanged)
+
+```bash
+cmake -S cmake-system -B build-system -DCMAKE_BUILD_TYPE=Release
+cmake --build build-system --target sim
+```
+
+Same `Hello, world !` / `PASS` / `SIM DONE`. Conan tree and Windows notes: **[CMAKE.md](../CMAKE.md)**.
+
 ## How to read PASS / FAIL
 
 | Check | Meaning |

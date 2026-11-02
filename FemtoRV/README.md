@@ -16,6 +16,8 @@ make test_verilator_hello
 # Hello, world !  /  PASS  /  ALL TESTS PASSED.
 ```
 
+Optional CMake dual-tree (this Make path stays): repo-root [`CMAKE.md`](../CMAKE.md).
+
 Quick links:
 - [IceStick tutorial](TUTORIALS/IceStick.md)
 - [IceBreaker tutorial](TUTORIALS/IceBreaker.md)
